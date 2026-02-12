@@ -238,8 +238,9 @@ class AgentLoop:
         logger.info(f"Response to {msg.channel}:{msg.sender_id}: {preview}")
         
         # Save to session
-        session.add_message("user", msg.content)
-        session.add_message("assistant", final_content)
+        if response.finish_reason != "error":
+            session.add_message("user", msg.content)
+            session.add_message("assistant", final_content)
         self.sessions.save(session)
         
         return OutboundMessage(
